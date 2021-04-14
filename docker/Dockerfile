@@ -2,7 +2,6 @@ ARG FROM=debian:buster-slim
 FROM ${FROM}
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG GIT_VERSION="2.26.2"
 ARG GH_RUNNER_VERSION
 ARG DOCKER_COMPOSE_VERSION="1.27.4"
 
@@ -28,7 +27,7 @@ LABEL maintainer="me@tcardonne.fr" \
     org.label-schema.docker.cmd="docker run -it tcardonne/github-runner:latest"
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
         curl \
         unzip \
         apt-transport-https \
@@ -37,12 +36,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
         sudo \
         supervisor \
         jq \
-        iputils-ping \
-        build-essential \
-        zlib1g-dev \
         gettext \
-        liblttng-ust0 \
-        libcurl4-openssl-dev \
+        git \
+        gnupg2 \
         openssh-client && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
@@ -51,24 +47,17 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chmod 644 /etc/supervisor/conf.d/supervisord.conf
 
 # Install Docker CLI
-RUN curl -fsSL https://get.docker.com -o- | sh && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get clean
+RUN curl -fsSL "https://download.docker.com/linux/debian/gpg" | apt-key add -qq - >/dev/null \
+ && echo "deb [arch=amd64] https://download.docker.com/linux/debian buster stable" > /etc/apt/sources.list.d/docker.list \
+ && apt-get update -qq >/dev/null \
+ && apt-get install -y --no-install-recommends docker-ce-cli \
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-get clean
 
 # Install Docker-Compose
 RUN curl -L -o /usr/local/bin/docker-compose \
     "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" && \
     chmod +x /usr/local/bin/docker-compose
-
-RUN cd /tmp && \
-    curl -sL -o git.tgz \
-    https://www.kernel.org/pub/software/scm/git/git-${GIT_VERSION}.tar.gz && \
-    tar zxf git.tgz  && \
-    cd git-${GIT_VERSION}  && \
-    ./configure --prefix=/usr  && \
-    make && \
-    make install && \
-    rm -rf /tmp/*
 
 RUN mkdir -p /home/runner ${AGENT_TOOLSDIRECTORY}
 
