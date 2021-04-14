@@ -21,17 +21,13 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
       - name: prepare
-        id: prepare
-        run: |
-            TAG=${GITHUB_REF#refs/tags/}
-            echo ::set-output name=tag_name::${TAG}
+        id: prepare_tag
+        run: echo ::set-output name=tag_name::${GITHUB_REF#refs/tags/}
         if: ${{ github.event_name == 'release' }}
       
       - name: prepare
-        id: prepare
-        run: |
-            TAG=${GITHUB_REF#refs/heads/}
-            echo ::set-output name=tag_name::${TAG}
+        id: prepare_branch
+        run: echo ::set-output name=branch_name::${GITHUB_REF#refs/heads/}
         if: ${{ github.event_name != 'release' }}
 
       - name: build image
@@ -39,11 +35,14 @@ jobs:
       
       - name: tag and push
         run:
-          make tag TAG=${{ steps.prepare.outputs.tag_name }}
-          make push TAG=${{ steps.prepare.outputs.tag_name }}
-      
-      - name: tag and push latest
-        run:
+          make tag TAG=${{ steps.prepare_tag.outputs.tag_name }}
+          make push TAG=${{ steps.prepare_tag.outputs.tag_name }}
           make tag TAG=latest
           make push TAG=latest
         if: ${{ github.event_name == 'release' }}
+      
+      - name: tag and push (branch)
+        run:
+          make tag TAG=${{ steps.prepare_branch.outputs.branch_name }}
+          make push TAG=${{ steps.prepare_branch.outputs.branch_name }}
+        if: ${{ github.event_name != 'release' }}
