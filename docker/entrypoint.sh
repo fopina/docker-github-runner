@@ -42,10 +42,10 @@ if [[ -f ".runner" ]]; then
 else
     if [[ ! -z $RUNNER_ORGANIZATION_URL ]]; then
         SCOPE="orgs"
-        RUNNER_URL="${RUNNER_ORGANIZATION_URL}"
+        RUNNER_URL="${RUNNER_ORGANIZATION_URL%/}"
     else
         SCOPE="repos"
-        RUNNER_URL="${RUNNER_REPOSITORY_URL}"
+        RUNNER_URL="${RUNNER_REPOSITORY_URL%/}"
     fi
 
     if [[ -n $GITHUB_ACCESS_TOKEN ]]; then
