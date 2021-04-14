@@ -1,4 +1,4 @@
-APP_NAME="fopina/github-runner"
+APP_NAME=fopina/github-runner
 
 # HELP
 # This will output the help for each task
@@ -10,10 +10,13 @@ help: ## This help.
 .DEFAULT_GOAL := help
 
 build: ## Build the image
-	docker build -t $(APP_NAME) docker
+	docker build -t $(APP_NAME):local docker
 
 shell: ## Creates a shell inside the container for debug purposes
-	docker run -it $(APP_NAME) bash
+	docker run -it $(APP_NAME):local bash
 
-shell-compose: ## Creates a shell inside the docker-compose service for debug purposes
-	docker-compose run --rm runner bash
+tag:  ## Re-tag image for publishing
+	docker tag $(APP_NAME):local $(APP_NAME):$(TAG)
+
+push:  ## push specific tag
+	docker push $(APP_NAME):$(TAG)
