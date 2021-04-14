@@ -24,7 +24,7 @@ jobs:
         id: prepare_tag
         run: echo ::set-output name=tag_name::${GITHUB_REF#refs/tags/}
         if: ${{ github.event_name == 'release' }}
-      
+
       - name: prepare
         id: prepare_branch
         run: echo ::set-output name=branch_name::${GITHUB_REF#refs/heads/}
@@ -32,17 +32,17 @@ jobs:
 
       - name: build image
         run: make build
-      
+
       - name: tag and push
-        run:
+        run: |
           make tag TAG=${{ steps.prepare_tag.outputs.tag_name }}
           make push TAG=${{ steps.prepare_tag.outputs.tag_name }}
           make tag TAG=latest
           make push TAG=latest
         if: ${{ github.event_name == 'release' }}
-      
+
       - name: tag and push (branch)
-        run:
+        run: |
           make tag TAG=${{ steps.prepare_branch.outputs.branch_name }}
           make push TAG=${{ steps.prepare_branch.outputs.branch_name }}
         if: ${{ github.event_name != 'release' }}
