@@ -22,4 +22,4 @@ push:  ## push specific tag
 	docker push $(APP_NAME):$(TAG)
 
 testenv:  # run with local test env
-	docker run -it --env-file .env $(APP_NAME):local
+	docker run -it -e RUNNER_LABELS="tester" --env-file .env $(APP_NAME):local

@@ -1,0 +1,11 @@
+name: test self-hosted
+
+on: [workflow_dispatch] 
+
+jobs:
+  build:
+    name: use self-hosted
+    runs-on: tester
+    steps:
+      - name: keep it simple
+        run: echo $(hostname)
