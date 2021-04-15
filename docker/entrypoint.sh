@@ -14,6 +14,14 @@ if [[ -z $RUNNER_WORK_DIRECTORY ]]; then
     export RUNNER_WORK_DIRECTORY="_work"
 fi
 
+if [[ -n $RUNNER_TOKEN_FILE ]]; then
+    export RUNNER_TOKEN=$(cat $RUNNER_TOKEN_FILE)
+fi
+
+if [[ -n $GITHUB_ACCESS_TOKEN_FILE ]]; then
+    export GITHUB_ACCESS_TOKEN=$(cat $GITHUB_ACCESS_TOKEN_FILE)
+fi
+
 if [[ -z $RUNNER_TOKEN && -z $GITHUB_ACCESS_TOKEN ]]; then
     echo "Error : You need to set RUNNER_TOKEN (or GITHUB_ACCESS_TOKEN) environment variable."
     exit 1
