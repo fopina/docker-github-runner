@@ -65,7 +65,7 @@ RUN mkdir -p /home/runner ${AGENT_TOOLSDIRECTORY}
 
 WORKDIR /home/runner
 
-RUN test "${TARGETARCH}}" = "amd64" && export TARGETARCH=x64 \
+RUN test "${TARGETARCH}" = "amd64" && export TARGETARCH=x64 || true \
     && curl -L -O https://github.com/actions/runner/releases/download/v${GH_RUNNER_VERSION}/actions-runner-linux-${TARGETARCH}-${GH_RUNNER_VERSION}.tar.gz \
     && tar -zxf actions-runner-linux-${TARGETARCH}-${GH_RUNNER_VERSION}.tar.gz \
     && rm -f actions-runner-linux-${TARGETARCH}-${GH_RUNNER_VERSION}.tar.gz \
