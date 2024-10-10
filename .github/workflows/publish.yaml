@@ -51,7 +51,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          build-args:
+          build-args: |
             GH_RUNNER_VERSION=${{ env.GH_RUNNER_VERSION }}
             DOCKER_COMPOSE_VERSION=${{ env.DOCKER_COMPOSE_VERSION }}
           tags: |
@@ -65,7 +65,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          build-args:
+          build-args: |
             GH_RUNNER_VERSION=${{ env.GH_RUNNER_VERSION }}
             DOCKER_COMPOSE_VERSION=${{ env.DOCKER_COMPOSE_VERSION }}
           tags: |
