@@ -52,8 +52,8 @@ jobs:
         with:
           push: true
           build-args: |
-            GH_RUNNER_VERSION=${{ env.GH_RUNNER_VERSION }}
-            DOCKER_COMPOSE_VERSION=${{ env.DOCKER_COMPOSE_VERSION }}
+            GH_RUNNER_VERSION
+            DOCKER_COMPOSE_VERSION
           tags: |
             ghcr.io/fopina/github-runner:${{ env.GH_RUNNER_VERSION }}
             ghcr.io/fopina/github-runner:${{ steps.prepare_tag.outputs.tag_name }}
@@ -66,8 +66,8 @@ jobs:
         with:
           push: true
           build-args: |
-            GH_RUNNER_VERSION=${{ env.GH_RUNNER_VERSION }}
-            DOCKER_COMPOSE_VERSION=${{ env.DOCKER_COMPOSE_VERSION }}
+            GH_RUNNER_VERSION
+            DOCKER_COMPOSE_VERSION
           tags: |
             ghcr.io/fopina/github-runner:${{ steps.prepare_branch.outputs.branch_name }}-${{ env.GH_RUNNER_VERSION }}
             ghcr.io/fopina/github-runner:${{ steps.prepare_branch.outputs.branch_name }}
