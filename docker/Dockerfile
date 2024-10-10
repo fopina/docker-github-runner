@@ -67,8 +67,8 @@ WORKDIR /home/runner
 
 RUN [ "${TARGETARCH}}" == "amd64" ] && export TARGETARCH=x64 \
     && curl -L -O https://github.com/actions/runner/releases/download/v${GH_RUNNER_VERSION}/actions-runner-$(uname -s)-${TARGETARCH}-${GH_RUNNER_VERSION}.tar.gz \
-    && tar -zxf actions-runner-linux-x64-${GH_RUNNER_VERSION}.tar.gz \
-    && rm -f actions-runner-linux-x64-${GH_RUNNER_VERSION}.tar.gz \
+    && tar -zxf actions-runner-linux-${TARGETARCH}-${GH_RUNNER_VERSION}.tar.gz \
+    && rm -f actions-runner-linux-${TARGETARCH}-${GH_RUNNER_VERSION}.tar.gz \
     && ./bin/installdependencies.sh \
     && chown -R root: /home/runner \
     && rm -rf /var/lib/apt/lists/* \
