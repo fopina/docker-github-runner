@@ -29,3 +29,11 @@ push:  ## push specific tag
 
 testenv:  # run with local test env
 	docker run -it -e RUNNER_LABELS="tester" --env-file .env $(APP_NAME):local
+
+buildx:
+	docker buildx build \
+	             --build-arg GH_RUNNER_VERSION \
+				 --build-arg DOCKER_COMPOSE_VERSION \
+				 --platform linux/amd64,linux/arm64 \
+				 -t invalid_push_target_just_to_build \
+				 docker
