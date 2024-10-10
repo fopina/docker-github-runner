@@ -39,14 +39,14 @@ jobs:
 
       - name: prepare
         id: prepare_tag
-        run: echo ::set-output name=tag_name::${GITHUB_REF#refs/tags/}
+        run: echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
         if: ${{ github.event_name == 'release' }}
 
       - name: prepare
         id: prepare_branch
-        run: echo ::set-output name=branch_name::${GITHUB_REF#refs/heads/}
+        run: echo "branch_name=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
         if: ${{ github.event_name != 'release' }}
-      
+
       - name: Build and push image - release
         uses: docker/build-push-action@v6
         with:
