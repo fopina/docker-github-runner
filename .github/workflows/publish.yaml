@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: set up env
         run: |
-          echo "GH_RUNNER_VERSION=2.321.0" >> $GITHUB_ENV
+          echo "GH_RUNNER_VERSION=2.320.0" >> $GITHUB_ENV
           echo "DOCKER_COMPOSE_VERSION=2.29.7" >> $GITHUB_ENV
 
       - name: Checkout
