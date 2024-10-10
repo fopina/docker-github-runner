@@ -16,9 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: set up env
-        run: |
-          echo "GH_RUNNER_VERSION=2.320.0" >> $GITHUB_ENV
-          echo "DOCKER_COMPOSE_VERSION=2.29.7" >> $GITHUB_ENV
+        run: cat versions.env >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v4

@@ -9,8 +9,14 @@ help: ## This help.
 
 .DEFAULT_GOAL := help
 
+include versions.env
+export
+
 build: ## Build the image
-	docker build -t $(APP_NAME):local docker
+	docker build --build-arg GH_RUNNER_VERSION \
+				 --build-arg DOCKER_COMPOSE_VERSION \
+				 -t $(APP_NAME):local \
+				 docker
 
 shell: ## Creates a shell inside the container for debug purposes
 	docker run -it $(APP_NAME):local bash
