@@ -1,5 +1,17 @@
 name: test self-hosted
 
+env:
+  JUST_A_MULTILINE_COMMENT: |
+    This workflow is to quickly test (integration) the container.
+    Run the test build of the runner locally with:
+      docker run --rm \
+                 -e RUNNER_REPOSITORY_URL=https://github.com/fopina/docker-github-runner \
+                 -e RUNNER_LABELS=tester \
+                 -e RUNNER_TOKEN \
+                 ghcr.io/fopina/github-runner:dev
+    Get a runner token from https://github.com/fopina/docker-github-runner/settings/actions/runners/new?arch=x64&os=linux
+    Then run this action: https://github.com/fopina/docker-github-runner/actions/workflows/test.yaml
+
 on: [workflow_dispatch] 
 
 jobs:
