@@ -1,5 +1,4 @@
-ARG FROM=debian:buster-slim
-FROM ${FROM}
+FROM debian:bookworm-slim
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG GH_RUNNER_VERSION="2.320.0"
@@ -24,7 +23,9 @@ LABEL maintainer="me@tcardonne.fr" \
     org.label-schema.url="https://github.com/tcardonne/docker-github-runner" \
     org.label-schema.vcs-url="https://github.com/tcardonne/docker-github-runner" \
     org.label-schema.vendor="Thomas Cardonne" \
-    org.label-schema.docker.cmd="docker run -it tcardonne/github-runner:latest"
+    org.label-schema.docker.cmd="docker run -it tcardonne/github-runner:latest" \
+    org.label-schema.runner.version="${GH_RUNNER_VERSION}" \
+    org.label-schema.compose.version="${DOCKER_COMPOSE_VERSION}"
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -46,9 +47,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chmod 644 /etc/supervisor/conf.d/supervisord.conf
 
+ARG TARGETARCH
 # Install Docker CLI
 RUN curl -fsSL "https://download.docker.com/linux/debian/gpg" | apt-key add -qq - >/dev/null \
- && echo "deb [arch=amd64] https://download.docker.com/linux/debian buster stable" > /etc/apt/sources.list.d/docker.list \
+ && echo "deb [arch=${TARGETARCH}] https://download.docker.com/linux/debian bookworm stable" > /etc/apt/sources.list.d/docker.list \
  && apt-get update -qq >/dev/null \
  && apt-get install -y --no-install-recommends docker-ce-cli \
  && rm -rf /var/lib/apt/lists/* \
@@ -63,9 +65,10 @@ RUN mkdir -p /home/runner ${AGENT_TOOLSDIRECTORY}
 
 WORKDIR /home/runner
 
-RUN curl -L -O https://github.com/actions/runner/releases/download/v${GH_RUNNER_VERSION}/actions-runner-linux-x64-${GH_RUNNER_VERSION}.tar.gz \
-    && tar -zxf actions-runner-linux-x64-${GH_RUNNER_VERSION}.tar.gz \
-    && rm -f actions-runner-linux-x64-${GH_RUNNER_VERSION}.tar.gz \
+RUN test "${TARGETARCH}" = "amd64" && export TARGETARCH=x64 || true \
+    && curl -L -O https://github.com/actions/runner/releases/download/v${GH_RUNNER_VERSION}/actions-runner-linux-${TARGETARCH}-${GH_RUNNER_VERSION}.tar.gz \
+    && tar -zxf actions-runner-linux-${TARGETARCH}-${GH_RUNNER_VERSION}.tar.gz \
+    && rm -f actions-runner-linux-${TARGETARCH}-${GH_RUNNER_VERSION}.tar.gz \
     && ./bin/installdependencies.sh \
     && chown -R root: /home/runner \
     && rm -rf /var/lib/apt/lists/* \
