@@ -40,6 +40,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
         gettext \
         git \
         gnupg2 \
+        python3.11-venv \
         openssh-client && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
