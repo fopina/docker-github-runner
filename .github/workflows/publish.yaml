@@ -35,7 +35,9 @@ jobs:
 
       - name: prepare
         id: prepare_branch
-        run: echo "branch_name=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+        run: |
+          echo "branch_name=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+          echo "runner_version=$(cat docker/Dockerfile | grep ^FROM | head -n1 | cut -d ':' -f2)" >> $GITHUB_OUTPUT
 
       - name: Build and push image - release
         uses: docker/build-push-action@v6
@@ -46,7 +48,7 @@ jobs:
             GH_RUNNER_VERSION
             DOCKER_COMPOSE_VERSION
           tags: |
-            ghcr.io/fopina/github-runner:${{ env.GH_RUNNER_VERSION }}
+            ghcr.io/fopina/github-runner:${{ steps.prepare_branch.outputs.runner_version }}
             ghcr.io/fopina/github-runner:latest
           context: docker
         if: ${{ steps.prepare_branch.outputs.branch_name == 'main' }}
@@ -60,7 +62,7 @@ jobs:
             GH_RUNNER_VERSION
             DOCKER_COMPOSE_VERSION
           tags: |
-            ghcr.io/fopina/github-runner:${{ steps.prepare_branch.outputs.branch_name }}-${{ env.GH_RUNNER_VERSION }}
+            ghcr.io/fopina/github-runner:${{ steps.prepare_branch.outputs.branch_name }}-${{ steps.prepare_branch.outputs.runner_version }}
             ghcr.io/fopina/github-runner:${{ steps.prepare_branch.outputs.branch_name }}
           context: docker
         if: ${{ steps.prepare_branch.outputs.branch_name != 'main' }}
