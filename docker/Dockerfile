@@ -25,15 +25,11 @@ LABEL maintainer="me@tcardonne.fr" \
     org.label-schema.runner.version="${GH_RUNNER_VERSION}" \
     org.label-schema.compose.version="${DOCKER_COMPOSE_VERSION}"
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+ && apt-get install -y --no-install-recommends \
         docker-compose-v2 \
-        supervisor && \
-    rm -rf /var/lib/apt/lists/* && \
+ && rm -rf /var/lib/apt/lists/* && \
     apt-get clean
-
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-RUN chmod 644 /etc/supervisor/conf.d/supervisord.conf
 
 RUN mkdir -p /home/runner ${AGENT_TOOLSDIRECTORY}
 
@@ -43,5 +39,6 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 USER runner
+
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["/home/runner/bin/runsvc.sh"]
