@@ -45,6 +45,14 @@ if [[ -n $RUNNER_LABELS ]]; then
     CONFIG_OPTS="${CONFIG_OPTS} --labels ${RUNNER_LABELS}"
 fi
 
+if [[ -n $RUNNER_LABELS ]]; then
+    CONFIG_OPTS="${CONFIG_OPTS} --labels ${RUNNER_LABELS}"
+fi
+
+if [[ $RUNNER_DISABLE_UPDATE = "true" ]]; then
+    CONFIG_OPTS="${CONFIG_OPTS} --disableupdate"
+fi
+
 if [[ -f ".runner" ]]; then
     echo "Runner already configured. Skipping config."
 else
