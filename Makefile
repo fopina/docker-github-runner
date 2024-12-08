@@ -9,12 +9,8 @@ help: ## This help.
 
 .DEFAULT_GOAL := help
 
-include versions.env
-export
-
 build: ## Build the image
-	docker build --build-arg GH_RUNNER_VERSION \
-				 --build-arg DOCKER_COMPOSE_VERSION \
+	docker build \
 				 -t $(APP_NAME):local \
 				 docker
 
@@ -32,8 +28,6 @@ testenv:  # run with local test env
 
 buildx:
 	docker buildx build \
-	             --build-arg GH_RUNNER_VERSION \
-				 --build-arg DOCKER_COMPOSE_VERSION \
 				 --platform linux/amd64,linux/arm64 \
 				 -t invalid_push_target_just_to_build \
 				 docker
