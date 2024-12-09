@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - dev
+      - dev-*
       - main
 
 jobs:
@@ -44,9 +45,6 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/arm64
-          build-args: |
-            GH_RUNNER_VERSION
-            DOCKER_COMPOSE_VERSION
           tags: |
             ghcr.io/fopina/github-runner:${{ steps.prepare_branch.outputs.runner_version }}
             ghcr.io/fopina/github-runner:latest
@@ -58,9 +56,6 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/arm64
-          build-args: |
-            GH_RUNNER_VERSION
-            DOCKER_COMPOSE_VERSION
           tags: |
             ghcr.io/fopina/github-runner:${{ steps.prepare_branch.outputs.branch_name }}-${{ steps.prepare_branch.outputs.runner_version }}
             ghcr.io/fopina/github-runner:${{ steps.prepare_branch.outputs.branch_name }}

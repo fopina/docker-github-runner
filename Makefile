@@ -1,4 +1,4 @@
-APP_NAME=fopina/github-runner
+APP_NAME=ghcr.io/fopina/github-runner
 
 # HELP
 # This will output the help for each task
