@@ -1,12 +1,15 @@
+# syntax=docker/dockerfile:1.4
 FROM ghcr.io/actions/actions-runner:2.323.0
 
 ENV RUNNER_NAME=""
 ENV RUNNER_WORK_DIRECTORY="_work"
+# This is a placeholder that will be overridden at runtime
 ENV RUNNER_TOKEN=""
 ENV RUNNER_REPOSITORY_URL=""
 ENV RUNNER_LABELS=""
 ENV RUNNER_ALLOW_RUNASROOT=true
-ENV RUNNER_DISABLE_UPDATE="true"
+ENV RUNNER_DISABLE_UPDATE="false"
+# This is a placeholder that will be overridden at runtime
 ENV GITHUB_ACCESS_TOKEN=""
 ENV AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
 
